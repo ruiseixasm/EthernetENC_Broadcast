@@ -13,11 +13,11 @@ This version enables reception of broadcast UDP packets:
 ## Usage
 Replace in your sketch:
 ```cpp
-#include <Ethernet.h>  // Original
+#include <EthernetENC.h>	// Original
 ```
 With:
 ```cpp
-#include <EthernetENC_Broadcast.h>  // This version
+#include <EthernetENC_Broadcast.h>	// This version
 ```
 UDP sockets will now accept broadcast packets by default.
 ## Compatibility
