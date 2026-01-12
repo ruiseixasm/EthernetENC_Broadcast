@@ -107,14 +107,15 @@ bool Enc28J60Network::init(uint8_t* macaddr)
 
 //   writeReg(ERXFCON, ERXFCON_UCEN | ERXFCON_CRCEN | ERXFCON_BCEN);
 
-	// Enable all necessary filters:
+
+	// Enable all useful filters in OR mode (ANDOR = 0)
 	writeReg(ERXFCON, 
-		ERXFCON_UCEN |    // Unicast packets to our MAC
-		ERXFCON_CRCEN |   // CRC check
-		ERXFCON_BCEN |    // Broadcast (255.255.255.255)
-		ERXFCON_MCEN |    // Multicast
-		ERXFCON_IPEN |    // IP protocol packets
-		ERXFCON_MPEN      // Magic Packet (Wake-on-LAN)
+		ERXFCON_UCEN  |   // 0x80 - Accept unicast to our MAC
+		ERXFCON_CRCEN |   // 0x20 - CRC check enabled  
+		ERXFCON_BCEN  |   // 0x01 - Accept MAC broadcasts (FF:FF:FF:FF:FF:FF → 255.255.255.255)
+		ERXFCON_MCEN      // 0x02 - Accept multicast
+		// ANDOR bit (0x40) = 0 (OR mode - default)
+		// This accepts packets if ANY filter matches
 	);
 
 
