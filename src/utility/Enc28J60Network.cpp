@@ -95,9 +95,30 @@ bool Enc28J60Network::init(uint8_t* macaddr)
   // 06 08 -- ff ff ff ff ff ff -> ip checksum for theses bytes=f7f9
   // in binary these poitions are:11 0000 0011 1111
   // This is hex 303F->EPMM0=0x3f,EPMM1=0x30
-  writeReg(ERXFCON, ERXFCON_UCEN|ERXFCON_CRCEN|ERXFCON_PMEN);
-  writeRegPair(EPMM0, 0x303f);
-  writeRegPair(EPMCSL, 0xf7f9);
+
+
+
+  
+  // WHERE THE CHANGE TO ACCEPT BROADCAST UDP PACKAGES IS DONE
+
+//   writeReg(ERXFCON, ERXFCON_UCEN|ERXFCON_CRCEN|ERXFCON_PMEN);
+//   writeRegPair(EPMM0, 0x303f);
+//   writeRegPair(EPMCSL, 0xf7f9);
+
+//   writeReg(ERXFCON, ERXFCON_UCEN | ERXFCON_CRCEN | ERXFCON_BCEN);
+
+	// Enable all necessary filters:
+	writeReg(ERXFCON, 
+		ERXFCON_UCEN |    // Unicast packets to our MAC
+		ERXFCON_CRCEN |   // CRC check
+		ERXFCON_BCEN |    // Broadcast (255.255.255.255)
+		ERXFCON_MCEN |    // Multicast
+		ERXFCON_IPEN |    // IP protocol packets
+		ERXFCON_MPEN      // Magic Packet (Wake-on-LAN)
+	);
+
+
+
   //
   //
   // do bank 2 stuff
